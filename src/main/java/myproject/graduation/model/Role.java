@@ -1,4 +1,4 @@
-package myproject.graduation.person;
+package myproject.graduation.model;
 
 import org.springframework.security.core.GrantedAuthority;
 

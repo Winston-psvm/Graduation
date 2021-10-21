@@ -1,13 +1,12 @@
 package myproject.graduation.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.util.ProxyUtils;
 
 import javax.persistence.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.Serializable;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
@@ -16,6 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class BaseEntity implements Persistable<Integer> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)

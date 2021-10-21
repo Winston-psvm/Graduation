@@ -1,4 +1,4 @@
-package myproject.graduation.model;
+package myproject.graduation.entity;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
@@ -8,7 +8,9 @@ import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import myproject.graduation.person.User;
+import myproject.graduation.entity.Meal;
+import myproject.graduation.entity.User;
+import myproject.graduation.model.NamedEntity;
 import org.hibernate.annotations.*;
 
 import java.util.*;
@@ -17,7 +19,7 @@ import java.util.*;
 @Table(name = "restaurant")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Restaurant extends NamedEntity {
 
@@ -35,8 +37,10 @@ public class Restaurant extends NamedEntity {
     private Set<User> admins;
 
 
-    @JsonManagedReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant", fetch = FetchType.EAGER)
-    private List<Meal> menu;
+//    @JsonManagedReference
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant", fetch = FetchType.EAGER)
+//    private List<Meal> menu;
+
+
 }

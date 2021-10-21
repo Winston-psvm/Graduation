@@ -2,21 +2,24 @@ package myproject.graduation.model;
 
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @MappedSuperclass
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NamedEntity extends BaseEntity{
+
     @Column(name = "name", nullable = false)
     @NonNull
     @NotBlank
     @Size(min = 2, max = 100)
-    private String name;
+    public String name;
 
-    protected NamedEntity(Integer id, String name) {
+    public NamedEntity(Integer id, String name) {
         super(id);
         this.name = name;
     }

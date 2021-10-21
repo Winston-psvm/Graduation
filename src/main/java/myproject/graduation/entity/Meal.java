@@ -1,9 +1,7 @@
-package myproject.graduation.model;
+package myproject.graduation.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import myproject.graduation.model.NamedEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 @Table(name = "meal")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Meal extends NamedEntity {
 

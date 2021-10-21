@@ -1,30 +1,29 @@
-package myproject.graduation.model;
+package myproject.graduation.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import myproject.graduation.model.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "voice")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Voice extends BaseEntity{
+public class Voice extends BaseEntity {
 
-    @Column(name = "restaurant_id")
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
+
+    @Column(name = "restaurant_id", nullable = false)
     private Integer restaurantId;
 
     @Column(name = "voice_date_time", nullable = false)
-    @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd kk:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateTime;
 }
