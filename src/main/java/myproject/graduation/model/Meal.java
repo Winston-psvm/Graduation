@@ -1,7 +1,6 @@
-package myproject.graduation.entity;
+package myproject.graduation.model;
 
 import lombok.*;
-import myproject.graduation.model.NamedEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

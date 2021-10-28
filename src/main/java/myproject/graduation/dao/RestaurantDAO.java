@@ -2,7 +2,7 @@ package myproject.graduation.dao;
 
 import lombok.AllArgsConstructor;
 import myproject.graduation.dao.crud.CrudRestaurantRepository;
-import myproject.graduation.entity.Restaurant;
+import myproject.graduation.model.Restaurant;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

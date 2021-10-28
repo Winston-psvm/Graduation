@@ -1,6 +1,6 @@
 package myproject.graduation.dao.crud;
 
-import myproject.graduation.entity.User;
+import myproject.graduation.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)

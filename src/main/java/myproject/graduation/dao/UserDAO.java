@@ -2,7 +2,7 @@ package myproject.graduation.dao;
 
 import lombok.AllArgsConstructor;
 import myproject.graduation.dao.crud.CrudUserRepository;
-import myproject.graduation.entity.User;
+import myproject.graduation.model.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 

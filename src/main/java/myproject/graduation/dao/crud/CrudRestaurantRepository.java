@@ -1,6 +1,6 @@
 package myproject.graduation.dao.crud;
 
-import myproject.graduation.entity.Restaurant;
+import myproject.graduation.model.Restaurant;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)

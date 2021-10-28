@@ -1,7 +1,6 @@
-package myproject.graduation.entity;
+package myproject.graduation.model;
 
 import lombok.*;
-import myproject.graduation.model.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;

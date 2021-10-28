@@ -1,4 +1,4 @@
-package myproject.graduation.entity;
+package myproject.graduation.model;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
@@ -6,11 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import myproject.graduation.entity.Meal;
-import myproject.graduation.entity.User;
-import myproject.graduation.model.NamedEntity;
 import org.hibernate.annotations.*;
 
 import java.util.*;

@@ -1,9 +1,7 @@
-package myproject.graduation.entity;
+package myproject.graduation.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import myproject.graduation.model.NamedEntity;
-import myproject.graduation.model.Role;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
