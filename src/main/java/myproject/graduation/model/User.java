@@ -25,7 +25,8 @@ public class User extends NamedEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "email", nullable = false, unique = true)
-    @Email
+    @Email(message = "Please provide a valid e-mail")
+    @NotEmpty(message = "Please provide an e-mail")
     @NotBlank
     @Size(max = 100)
     private String email;

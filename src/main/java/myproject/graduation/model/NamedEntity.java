@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
@@ -14,8 +15,8 @@ import javax.validation.constraints.Size;
 public class NamedEntity extends BaseEntity{
 
     @Column(name = "name", nullable = false)
-    @NonNull
     @NotBlank
+    @NotEmpty(message = "Please provide your first name")
     @Size(min = 2, max = 100)
     public String name;
 

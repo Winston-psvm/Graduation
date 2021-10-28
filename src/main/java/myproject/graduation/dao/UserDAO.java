@@ -15,8 +15,8 @@ public class UserDAO  {
 
     private final CrudUserRepository crudUserRepository;
 
-    public void save(User user) {
-        crudUserRepository.save(user);
+    public User save(User user) {
+        return crudUserRepository.save(user);
     }
 
     public boolean delete(int id) {
@@ -31,7 +31,4 @@ public class UserDAO  {
         return crudUserRepository.getByEmail(email);
     }
 
-    public List<User> getAll() {
-        return crudUserRepository.findAll(SORT_NAME_EMAIL);
-    }
 }
