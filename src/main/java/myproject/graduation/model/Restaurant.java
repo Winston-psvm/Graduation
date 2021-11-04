@@ -1,15 +1,14 @@
 package myproject.graduation.model;
 
-import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.*;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.*;
+import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Entity
 @Table(name = "restaurant")
@@ -28,15 +27,9 @@ public class Restaurant extends NamedEntity {
     @Digits(fraction = 0, integer = 10)
     private String telephone;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant", fetch = FetchType.EAGER)
-    private Set<User> admins;
-
-
-//    @JsonManagedReference
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant", fetch = FetchType.EAGER)
-//    private List<Meal> menu;
-
+    private List<User> admins;
 
 }

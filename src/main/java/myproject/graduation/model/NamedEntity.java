@@ -16,7 +16,7 @@ public class NamedEntity extends BaseEntity{
 
     @Column(name = "name", nullable = false)
     @NotBlank
-    @NotEmpty(message = "Please provide your first name")
+    @NotEmpty(message = "Please provide your name")
     @Size(min = 2, max = 100)
     public String name;
 

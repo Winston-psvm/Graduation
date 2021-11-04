@@ -1,24 +1,29 @@
 package myproject.graduation.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
-
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(callSuper = true, exclude = {"password"})
 public class User extends NamedEntity implements Serializable {
 
     @Serial
@@ -52,35 +57,34 @@ public class User extends NamedEntity implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
     private Restaurant restaurant;
 
-    @Transient
-    private Set<Voice> voices = new LinkedHashSet<>();
-
-    public User(Integer id, String name, String email, String password, Set<Role> roles, Restaurant restaurant, Set<Voice> voices) {
-        super(id, name);
-        this.email = email;
-        this.password = password;
-        this.registered = new Date();
-        this.roles = roles;
-        this.restaurant = restaurant;
-        this.voices = voices;
+    public User(Integer id, String name, String email, String password, Role role, Role... roles) {
+        this(id, name, email, password, new Date(), EnumSet.of(role, roles));
     }
 
-    public User(Integer id, String name, String email, String password, Role  role) {
+    public User(Integer id, String name, String email, String password, Date registered, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
-        this.registered = new Date();
-        this.roles = Collections.singleton(role);
-        this.restaurant = null;
-        this.voices = null;
+        this.registered = registered;
+        setRoles(roles);
     }
 
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "name = " + name + ", " +
+                "email = " + email + ", " +
+                "registered = " + registered + ", " +
+                "roles = " + roles + ")";
+    }
 }

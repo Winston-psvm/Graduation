@@ -3,6 +3,7 @@ package myproject.graduation.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import myproject.graduation.util.HasId;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.util.ProxyUtils;
 
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class BaseEntity implements Persistable<Integer> {
+public class BaseEntity implements Persistable<Integer>, HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
