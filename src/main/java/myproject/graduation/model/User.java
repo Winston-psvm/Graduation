@@ -2,10 +2,7 @@ package myproject.graduation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
@@ -66,6 +63,8 @@ public class User extends NamedEntity implements Serializable {
     public User(User u) {
         this(u.id, u.name, u.email, u.password, u.registered, u.roles);
     }
+
+
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
         this(id, name, email, password, new Date(), EnumSet.of(role, roles));

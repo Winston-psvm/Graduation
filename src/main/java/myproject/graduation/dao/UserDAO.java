@@ -43,7 +43,8 @@ public class UserDAO {
     }
 
 
-    public User getWithRestaurant(Integer id) {
-        return crudUserRepository.getWithRest(id);
+    public Integer getRestId(Integer id) {
+        User user =  crudUserRepository.getWithRest(id);
+        return user.getRestaurant().id();
     }
 }

@@ -7,7 +7,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -15,10 +17,14 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-public class Restaurant extends NamedEntity {
+public class Restaurant extends BaseEntity {
+    @Column(name ="title", unique = true, nullable = false )
+    @NotBlank
+    @NotEmpty(message = "Please provide title")
+    @Size(min = 2, max = 100)
+    private String title;
 
-    @Column(name = "address")
+    @Column(name = "address", nullable = false)
     @NotEmpty
     private String address;
 
@@ -31,5 +37,25 @@ public class Restaurant extends NamedEntity {
     @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<User> admins;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @JsonManagedReference
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Menu> menus ;
+
+    public Restaurant(Integer id, String title, String address, String telephone) {
+        super(id);
+        this.title = title;
+        this.address = address;
+        this.telephone = telephone;
+    }
+
+    public Restaurant(Integer id, String title, String address, String telephone, List<User> admins) {
+        super(id);
+        this.title = title;
+        this.address = address;
+        this.telephone = telephone;
+        this.admins = admins;
+    }
 
 }
