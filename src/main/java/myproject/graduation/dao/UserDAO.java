@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import myproject.graduation.dao.crud.CrudUserRepository;
 import myproject.graduation.model.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -25,10 +27,10 @@ public class UserDAO {
         return crudUserRepository.findById(id).orElse(null);
     }
 
-    public List<User> getAllByRestaurant( Integer restaurantId) { return crudUserRepository.getAllByRestaurantId(restaurantId); }
+    public List<User> getAllAdmins( Integer restaurantId) { return crudUserRepository.getUserByRestaurantId(restaurantId); }
 
 
-    public User getByEmail(String email) {
+    public Optional<User> getByEmail(String email) {
         return crudUserRepository.getByEmail(email);
     }
 
@@ -38,5 +40,10 @@ public class UserDAO {
 
     public User getById(int id) {
         return crudUserRepository.getById(id);
+    }
+
+
+    public User getWithRestaurant(Integer id) {
+        return crudUserRepository.getWithRest(id);
     }
 }

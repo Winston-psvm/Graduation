@@ -1,4 +1,4 @@
-package myproject.graduation.web.user;
+package myproject.graduation.web;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,22 +7,23 @@ import myproject.graduation.dao.VoiceDAO;
 import myproject.graduation.error.IllegalRequestDataException;
 import myproject.graduation.model.User;
 import myproject.graduation.model.Voice;
-import myproject.graduation.web.AuthUser;
+import myproject.graduation.to.UserTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
+import static myproject.graduation.util.UserUtil.*;
 import static myproject.graduation.util.ValidationUtil.assureIdConsistent;
+import static myproject.graduation.util.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(value = ProfileRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,27 +43,20 @@ public class ProfileRestController {
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> register(@Valid @RequestBody User user) {
-        log.info("register {}", user);
+    public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
+        log.info("register {}", userTo);
 
-        if (!user.isNew()) throw new IllegalRequestDataException("User must be new");
-        if (userDAO.getByEmail(user.getEmail()) != null) throw new IllegalRequestDataException("This email already exists");
+        checkNew(userTo);
 
-        User created = userDAO.save(prepareToSave(user));
+        if (userDAO.getByEmail(userTo.getEmail()).isPresent()) throw new IllegalRequestDataException("This email already exists");
+
+        User created = userDAO.save(prepareToSave(createNewFromTo(userTo)));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL).build().toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    private User prepareToSave(User user) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        user.setEmail(user.getEmail().toLowerCase());
-
-        return user;
-    }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -74,19 +68,16 @@ public class ProfileRestController {
     @Transactional
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody @Valid User updateUser, @AuthenticationPrincipal AuthUser authUser) {
+    public void update(@RequestBody @Valid UserTo userTo, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update {}", authUser);
-        User oldUser = authUser.getUser();
-        assureIdConsistent(updateUser, authUser.id());
-        Assert.notNull(updateUser,"User must be not null");
 
-        oldUser.setName(updateUser.getName());
-        oldUser.setEmail(updateUser.getEmail().toLowerCase());
-        oldUser.setPassword(updateUser.getPassword());
+        assureIdConsistent(userTo, authUser.id());
+        User user = authUser.getUser();
+        Optional<User> opt = userDAO.getByEmail(userTo.getEmail());
 
-        prepareToSave(oldUser);
+        if (opt.isPresent() && !opt.get().id.equals(authUser.id()))  throw new IllegalRequestDataException("This email already exists");
+        else userDAO.save(prepareToSave(updateFromTo(user, userTo)));
 
-        userDAO.save(oldUser);
     }
 
     @GetMapping("/votingHistory")

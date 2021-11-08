@@ -59,9 +59,13 @@ public class User extends NamedEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private Restaurant restaurant;
+
+
+    public User(User u) {
+        this(u.id, u.name, u.email, u.password, u.registered, u.roles);
+    }
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
         this(id, name, email, password, new Date(), EnumSet.of(role, roles));
@@ -78,13 +82,13 @@ public class User extends NamedEntity implements Serializable {
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
                 "name = " + name + ", " +
                 "email = " + email + ", " +
-                "registered = " + registered + ", " +
-                "roles = " + roles + ")";
+                "password = " + password + ", " +
+                "roles = " + roles + " )";
     }
 }
