@@ -22,7 +22,7 @@ public class Dish extends BaseEntity {
     @NotBlank
     @NotEmpty(message = "Please enter the name of the dish ")
     @Size(min = 2, max = 100)
-    public String title;
+    private String title;
 
     @NotEmpty
     @Column(name = "price")
@@ -34,5 +34,9 @@ public class Dish extends BaseEntity {
     @JsonBackReference
     private Menu menu;
 
-
+    public Dish(Integer id, String title, double price) {
+        super(id);
+        this.title = title;
+        this.price = price;
+    }
 }

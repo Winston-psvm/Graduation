@@ -1,24 +1,29 @@
 package myproject.graduation.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import myproject.graduation.util.DateTimeUtil;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "menu")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Menu extends BaseEntity {
 
-    @Column(name = "menu_date", nullable = false, unique = true)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Column(name = "date", nullable = false , unique = true )
+    @NotNull
+    @DateTimeFormat(pattern = DateTimeUtil.DATE_PATTERN)
     private LocalDate date;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
@@ -26,10 +31,20 @@ public class Menu extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     List<Dish> dishes;
 
-    @Column(name = "restaurant_id", nullable = false)
-    private Integer restaurantId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
+    private Restaurant restaurant;
 
-    public void setDishes(List<Dish> dishes) {
+    public Menu(Integer id, LocalDate date) {
+        super(id);
+        this.date = date;
+    }
+
+    public Menu(Integer id, LocalDate date, List<Dish> dishes) {
+        super(id);
+        this.date = date;
         this.dishes = dishes;
     }
 }

@@ -12,9 +12,6 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import static myproject.graduation.web.ProfileRestController.REST_URL;
 import static myproject.graduation.web.TestData.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

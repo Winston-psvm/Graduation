@@ -3,7 +3,6 @@ package myproject.graduation.dao.crud;
 import myproject.graduation.model.Voice;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

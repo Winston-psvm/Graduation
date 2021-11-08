@@ -2,13 +2,9 @@ package myproject.graduation.web;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.graduation.dao.MenuDao;
 import myproject.graduation.dao.RestaurantDAO;
-import myproject.graduation.dao.UserDAO;
 import myproject.graduation.error.IllegalRequestDataException;
-import myproject.graduation.model.Menu;
 import myproject.graduation.model.Restaurant;
-import myproject.graduation.model.Role;
 import myproject.graduation.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static myproject.graduation.util.ValidationUtil.*;
+import static myproject.graduation.util.ValidationUtil.assureIdConsistent;
+import static myproject.graduation.util.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(value = RestaurantRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,7 +33,6 @@ public class RestaurantRestController extends WebValidation {
     static final String REST_URL = "/api/admin/restaurant";
 
     private final RestaurantDAO restaurantDAO;
-    private final MenuDao menuDao;
 
     @Transactional
     @GetMapping
@@ -95,57 +91,4 @@ public class RestaurantRestController extends WebValidation {
         checkAdmins(id, authUser.getUser());
         restaurantDAO.delete(id);
     }
-
-//    @Transactional
-//    @GetMapping("/menu")
-//    public List<Menu> getAllMenu(@AuthenticationPrincipal AuthUser authUser) {
-//        Integer restId = getRestId(authUser);
-//        checkAdmins(restId, authUser.getUser());
-//        return menuDao.getAllMenuByRestId(restId);
-//    }
-//
-//    @Transactional
-//    @PostMapping(name = "/menu",consumes = MediaType.APPLICATION_JSON_VALUE )
-//    public ResponseEntity<Menu> createMenu(@RequestBody @Valid Menu menu, @AuthenticationPrincipal AuthUser authUser) {
-//        log.info("create {}", menu);
-//
-//        Integer restId = getRestId(authUser);
-//        checkAdmins(restId, authUser.getUser());
-//        checkNew(menu);
-//        Assert.notNull(menu, "Menu must be not null");
-//
-//        menu.setRestaurant(restaurantDAO.get(restId));
-//        Menu created = menuDao.save(menu);
-//        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                .path(REST_URL + "/menu/{id}")
-//                .buildAndExpand(created.getId()).toUri();
-//        return ResponseEntity.created(uriOfNewResource).body(created);
-//    }
-
-//    @Transactional
-//    @PutMapping( consumes = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void update(@PathVariable int id, @Valid @RequestBody Menu updateMenu, @PathVariable LocalDate date, @AuthenticationPrincipal AuthUser authUser) {
-//        log.info("update {} with date={}", updateMenu, date);
-//
-//        checkAdmins(id, authUser.getUser());
-//
-//        Menu oldMenu = menuDao.getByDate(date);
-//
-//        assureIdConsistent(updateMenu, oldMenu.id);
-//        Assert.notNull(updateMenu, "Restaurant must be not null");
-//
-//        oldMenu.setDishes(updateMenu.getDishes());
-//
-//        menuDao.save(oldMenu);
-//
-//    }
-//
-//    @DeleteMapping("/{id}/menu/{date}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void delete(@PathVariable int id, @AuthenticationPrincipal AuthUser authUser, @PathVariable LocalDate date) {
-//        log.info("delete meny by {}", date);
-//        checkAdmins(id, authUser.getUser());
-//        menuDao.delete(menuDao.getByDate(date).id);
-//    }
 }

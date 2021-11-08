@@ -1,8 +1,6 @@
 package myproject.graduation.dao.crud;
 
-import myproject.graduation.model.Menu;
 import myproject.graduation.model.Restaurant;
-import myproject.graduation.model.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;

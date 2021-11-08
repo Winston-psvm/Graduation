@@ -5,8 +5,6 @@ import myproject.graduation.dao.crud.CrudMenuRepository;
 import myproject.graduation.model.Menu;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -15,23 +13,23 @@ public class MenuDao {
 
     private final CrudMenuRepository crudMenuRepository;
 
-    public Menu save(Menu menu) {
-        return crudMenuRepository.save(menu);
+    public Menu get(Integer id) {
+        return crudMenuRepository.getById(id);
     }
 
-    public Menu getByDate(LocalDate date) {
-        return crudMenuRepository.findByDate(date);
+    public Menu save(Menu menu) {
+        return crudMenuRepository.save(menu);
     }
 
     public void delete(int id) {
         crudMenuRepository.delete(id);
     }
 
-    public List<Menu> getAllMenuById(Integer id) {
-        return crudMenuRepository.getAllByRestaurantId(id);
+    public List<Menu> getAllMenuByRestId(Integer id) {
+        return crudMenuRepository.getAllByRestaurantIdOrderByDateDesc(id);
     }
 
-    public Menu getCurrentMenu(Integer id) {
-        return crudMenuRepository.findByRestaurantIdAndDate(id, LocalDate.now());
+    public Menu getById(int menuId) {
+        return crudMenuRepository.getById(menuId);
     }
 }
