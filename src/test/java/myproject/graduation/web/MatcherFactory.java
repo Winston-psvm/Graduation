@@ -11,12 +11,6 @@ import java.util.function.BiConsumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Factory for creating test matchers.
- * <p>
- * Comparing actual and expected objects via AssertJ
- * Support converting json MvcResult to objects for comparation.
- */
 public class MatcherFactory {
 
     public static <T> Matcher<T> usingAssertions(Class<T> clazz, BiConsumer<T, T> assertion, BiConsumer<Iterable<T>, Iterable<T>> iterableAssertion) {
@@ -50,10 +44,7 @@ public class MatcherFactory {
             assertion.accept(actual, expected);
         }
 
-        @SafeVarargs
-        public final void assertMatch(Iterable<T> actual, T... expected) {
-            assertMatch(actual, List.of(expected));
-        }
+
 
         public void assertMatch(Iterable<T> actual, Iterable<T> expected) {
             iterableAssertion.accept(actual, expected);
@@ -63,10 +54,6 @@ public class MatcherFactory {
             return result -> assertMatch(JsonUtil.readValue(getContent(result), clazz), expected);
         }
 
-        @SafeVarargs
-        public final ResultMatcher contentJson(T... expected) {
-            return contentJson(List.of(expected));
-        }
 
         public ResultMatcher contentJson(Iterable<T> expected) {
             return result -> assertMatch(JsonUtil.readValues(getContent(result), clazz), expected);

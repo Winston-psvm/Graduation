@@ -1,8 +1,6 @@
 package myproject.graduation.util;
 
-import lombok.NonNull;
 import myproject.graduation.error.IllegalRequestDataException;
-import org.springframework.core.NestedExceptionUtils;
 
 public class ValidationUtil {
 
@@ -18,11 +16,5 @@ public class ValidationUtil {
         if (!bean.isNew()) {
             throw new IllegalRequestDataException(bean + " must be new (id=null)");
         }
-    }
-
-    @NonNull
-    public static Throwable getRootCause(@NonNull Throwable t) {
-        Throwable rootCause = NestedExceptionUtils.getRootCause(t);
-        return rootCause != null ? rootCause : t;
     }
 }

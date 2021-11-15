@@ -26,24 +26,19 @@ public class UserDAO {
         return crudUserRepository.findById(id).orElse(null);
     }
 
-    public List<User> getAllAdmins( Integer restaurantId) { return crudUserRepository.getUserByRestaurantId(restaurantId); }
-
+    public List<User> getAllAdmins(Integer restaurantId) {
+        return crudUserRepository.getUserByRestaurantId(restaurantId);
+    }
 
     public Optional<User> getByEmail(String email) {
         return crudUserRepository.getByEmail(email);
-    }
-
-    public List<User> findAll() {
-        return crudUserRepository.findAll();
     }
 
     public User getById(int id) {
         return crudUserRepository.getById(id);
     }
 
-
     public Integer getRestId(Integer id) {
-        User user =  crudUserRepository.getWithRest(id);
-        return user.getRestaurant().id();
+        return crudUserRepository.getWithRest(id).getRestaurant().id();
     }
 }

@@ -6,16 +6,14 @@ import myproject.graduation.dao.MenuDao;
 import myproject.graduation.dao.RestaurantDAO;
 import myproject.graduation.dao.VoiceDAO;
 import myproject.graduation.error.IllegalRequestDataException;
+import myproject.graduation.model.Menu;
 import myproject.graduation.model.Restaurant;
 import myproject.graduation.model.Voice;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -27,8 +25,7 @@ import java.util.Optional;
 @Slf4j
 @AllArgsConstructor
 public class VotingRestController {
-    static final String REST_URL = "/api/restaurant";
-    private static final LocalTime endTime = LocalTime.parse("11:00");
+    static final String REST_URL = "/api/voting";
 
     private final RestaurantDAO restaurantDAO;
     private final MenuDao menuDao;
@@ -36,36 +33,29 @@ public class VotingRestController {
 
     @GetMapping
     public List<Restaurant> getAll() {
-        if (restaurantDAO.getAll().isEmpty()) return null;
-        return restaurantDAO.getAll().get();
+        return restaurantDAO.getAll();
     }
 
-//    @GetMapping("/{id}")
-//    public List<Dish> getMenu(@PathVariable int id) {
-//        return menuDao.getCurrentMenu(id).getDishes();
-//    }
-
-    @GetMapping("/{id}/voting")
-    public List<Voice> getVotesRestaurant(@PathVariable int id) {
-        return voiceDAO.getAllRestVotes(id);
+    @GetMapping("/{id}")
+    public Menu getMenu(@PathVariable int id) {
+        Integer menuId = menuDao.getCurrentMenuId(id);
+        Optional<Menu> menu = Optional.ofNullable(menuDao.getWithDishes(menuId));
+        if (menu.isPresent()) return menu.get();
+        else throw new IllegalRequestDataException("The restaurant has no menu as of today");
     }
 
     @Transactional
-    @PostMapping(name = "/{id}/voting",value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Voice> voting( @AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
+    @PostMapping("/{id}")
+    public void voting( @AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
         log.info("voting restaurant id {}", id);
 
-        if( LocalTime.now().compareTo(endTime)==0){
+        if(!LocalTime.now().isAfter(LocalTime.of(11, 0))){
             Optional<Voice> oldVoice = Optional.ofNullable(voiceDAO.getCurrentUserVoice(authUser.id(), LocalDate.now()));
-            oldVoice.ifPresent(voice -> voiceDAO.delete(voice.id));
-            Voice created = voiceDAO.save(new Voice(authUser.id(), id, LocalDateTime.now()));
+            oldVoice.ifPresent(voice -> voiceDAO.delete(voice.id()));
+            voiceDAO.save(new Voice(null, authUser.id(), id, LocalDateTime.now()));
 
-            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path(REST_URL + "/{id}")
-                    .buildAndExpand(created.getId()).toUri();
-            return ResponseEntity.created(uriOfNewResource).body(created);
         }
-        throw new IllegalRequestDataException("Voting is over!");
+        else throw new IllegalRequestDataException("Voting is over!");
     }
 
     @GetMapping("/vote")

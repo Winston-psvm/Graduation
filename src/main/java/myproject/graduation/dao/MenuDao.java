@@ -5,6 +5,7 @@ import myproject.graduation.dao.crud.CrudMenuRepository;
 import myproject.graduation.model.Menu;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -21,7 +22,7 @@ public class MenuDao {
         return crudMenuRepository.save(menu);
     }
 
-    public void delete(int id) {
+    public void delete(Integer id) {
         crudMenuRepository.delete(id);
     }
 
@@ -29,7 +30,15 @@ public class MenuDao {
         return crudMenuRepository.getAllByRestaurantIdOrderByDateDesc(id);
     }
 
-    public Menu getById(int menuId) {
-        return crudMenuRepository.getById(menuId);
+    public Menu getById(Integer id) {
+        return crudMenuRepository.getById(id);
+    }
+
+    public Menu getWithDishes(Integer id) {
+        return crudMenuRepository.getWithDishes(id);
+    }
+
+    public Integer getCurrentMenuId(Integer restId) {
+        return crudMenuRepository.getByDateAndRestaurantId(LocalDate.now(), restId).id();
     }
 }

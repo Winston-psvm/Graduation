@@ -1,15 +1,14 @@
 package myproject.graduation.web;
 
-import myproject.graduation.model.*;
-
-import java.time.LocalDate;
-import java.util.List;
+import myproject.graduation.model.Menu;
+import myproject.graduation.model.Restaurant;
+import myproject.graduation.model.Role;
+import myproject.graduation.model.User;
 
 public class TestData {
     public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "password");
     public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingEqualsComparator(Restaurant.class);
     public static final MatcherFactory.Matcher<Menu> MENU_MATCHER = MatcherFactory.usingEqualsComparator(Menu.class);
-    public static final MatcherFactory.Matcher<Voice> VOICE_MATCHER = MatcherFactory.usingEqualsComparator(Voice.class);
 
 
 
@@ -23,7 +22,6 @@ public class TestData {
     public static final User user = new User(USER_ID, "User", USER_MAIL, "password", Role.USER);
     public static final User admin = new User(ADMIN_ID, "Admin", ADMIN_MAIL, "admin", Role.ADMIN, Role.USER);
     public static final Restaurant rest = new Restaurant(1,"Kebab", "Lithuania", "+375882558899");
-    public static final Menu menus = new Menu(null, LocalDate.of(2021, 11, 10), List.of(new Dish(null, "Fish", 12.2), new Dish(null, "Cheese", 1.2)));
 
 
 }

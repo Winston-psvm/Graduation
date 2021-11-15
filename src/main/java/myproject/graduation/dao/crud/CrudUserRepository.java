@@ -15,7 +15,6 @@ public interface CrudUserRepository extends BaseRepository<User> {
     @Query("SELECT u FROM User u WHERE u.id=?1")
     User getWithRest(int id);
 
-
     Optional<User> getByEmail(String email);
 
     List<User> getUserByRestaurantId(Integer id);

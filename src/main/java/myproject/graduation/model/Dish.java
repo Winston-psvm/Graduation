@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -24,7 +25,7 @@ public class Dish extends BaseEntity {
     @Size(min = 2, max = 100)
     private String title;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "price")
     private double price;
 

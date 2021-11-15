@@ -9,12 +9,12 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface CrudVoiceRepository extends BaseRepository<Voice> {
 
-    Voice getByUserIdAndDateTime(Integer id, LocalDateTime dateTime);
+    Voice findByUserIdAndDateTimeGreaterThanEqualAndDateTimeLessThanEqual(Integer userId, LocalDateTime start, LocalDateTime end );
 
     List<Voice> findAllByUserIdOrderByDateTimeDesc(Integer userId);
 
-    List<Voice> findAllByRestaurantIdOrderByDateTimeDesc(Integer restId);
+    List<Voice> findAllByDateTimeGreaterThanEqualAndDateTimeLessThanEqualOrderByDateTimeDesc(LocalDateTime start, LocalDateTime end);
 
-    List<Voice> findAllByDateTime(LocalDateTime dateTime);
+
 
 }

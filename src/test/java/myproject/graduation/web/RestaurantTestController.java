@@ -69,7 +69,7 @@ public class RestaurantTestController extends AbstractControllerTest {
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + "/" + RESTAURANT_ID))
                 .andExpect(status().isNoContent());
-        RESTAURANT_MATCHER.assertMatch(restaurantDAO.getAll().get(), new ArrayList<>());
+        RESTAURANT_MATCHER.assertMatch(restaurantDAO.getAll(), new ArrayList<>());
     }
 
     @Test

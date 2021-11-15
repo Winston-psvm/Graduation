@@ -18,7 +18,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Menu extends BaseEntity {
 
     @Column(name = "date", nullable = false , unique = true )
@@ -26,7 +25,7 @@ public class Menu extends BaseEntity {
     @DateTimeFormat(pattern = DateTimeUtil.DATE_PATTERN)
     private LocalDate date;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE)
     List<Dish> dishes;
@@ -36,11 +35,6 @@ public class Menu extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private Restaurant restaurant;
-
-    public Menu(Integer id, LocalDate date) {
-        super(id);
-        this.date = date;
-    }
 
     public Menu(Integer id, LocalDate date, List<Dish> dishes) {
         super(id);

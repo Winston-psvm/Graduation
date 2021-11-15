@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Voice extends BaseEntity {
 
     @Column(name = "user_id", nullable = false)
@@ -28,4 +27,11 @@ public class Voice extends BaseEntity {
     @NotNull
     @DateTimeFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
     private LocalDateTime dateTime;
+
+    public Voice(Integer id, Integer userId, Integer restaurantId, LocalDateTime dateTime) {
+        super(id);
+        this.userId = userId;
+        this.restaurantId = restaurantId;
+        this.dateTime = dateTime;
+    }
 }

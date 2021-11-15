@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
@@ -21,13 +22,8 @@ public class VoiceDAO  {
         return crudVoiceRepository.findAllByUserIdOrderByDateTimeDesc(userId);
     }
 
-    public List<Voice> getAllRestVotes(Integer restId) {
-        return crudVoiceRepository.findAllByRestaurantIdOrderByDateTimeDesc(restId);
-    }
-
     public Voice getCurrentUserVoice(Integer userId, LocalDate date) {
-        LocalDateTime dateTime = LocalDateTime.from(date);
-        return crudVoiceRepository.getByUserIdAndDateTime(userId, dateTime);
+        return crudVoiceRepository.findByUserIdAndDateTimeGreaterThanEqualAndDateTimeLessThanEqual(userId, date.atStartOfDay(), date.plus(1, ChronoUnit.DAYS).atStartOfDay());
     }
 
     public Voice save(Voice voice) {
@@ -39,8 +35,7 @@ public class VoiceDAO  {
     }
 
     public List<Voice> getCurrentVoices( LocalDate date) {
-        LocalDateTime dateTime = LocalDateTime.from(date);
-        return crudVoiceRepository.findAllByDateTime(dateTime);
+        return crudVoiceRepository.findAllByDateTimeGreaterThanEqualAndDateTimeLessThanEqualOrderByDateTimeDesc(date.atStartOfDay(), date.plus(1, ChronoUnit.DAYS).atStartOfDay());
     }
 
 

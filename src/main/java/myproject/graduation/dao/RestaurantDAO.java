@@ -6,7 +6,6 @@ import myproject.graduation.model.Restaurant;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -25,13 +24,12 @@ public class RestaurantDAO {
         return crudRestaurantRepository.findById(id).orElse(null);
     }
 
-    public Optional<List<Restaurant>> getAll(){ return Optional.ofNullable(crudRestaurantRepository.findAll()); }
+    public List<Restaurant> getAll() {
+        return crudRestaurantRepository.findAll();
+    }
 
     public Restaurant getById(int id) {
         return crudRestaurantRepository.getById(id);
     }
 
-    public Restaurant getWithMenus(int id) {
-        return crudRestaurantRepository.getWithMenu(id);
-    }
 }
