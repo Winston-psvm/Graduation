@@ -7,7 +7,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.transaction.annotation.Transactional;
 
 @NoRepositoryBean
-public interface BaseRepository<T> extends JpaRepository<T,Integer> {
+public interface BaseRepository<T> extends JpaRepository<T, Integer> {
 
     @Transactional
     @Modifying

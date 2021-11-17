@@ -6,14 +6,12 @@ import myproject.graduation.model.Voice;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-
 @Repository
 @AllArgsConstructor
-public class VoiceDAO  {
+public class VoiceDAO {
 
     private final CrudVoiceRepository crudVoiceRepository;
 
@@ -34,7 +32,7 @@ public class VoiceDAO  {
         crudVoiceRepository.delete(id);
     }
 
-    public List<Voice> getCurrentVoices( LocalDate date) {
+    public List<Voice> getCurrentVoices(LocalDate date) {
         return crudVoiceRepository.findAllByDateTimeGreaterThanEqualAndDateTimeLessThanEqualOrderByDateTimeDesc(date.atStartOfDay(), date.plus(1, ChronoUnit.DAYS).atStartOfDay());
     }
 

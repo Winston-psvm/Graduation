@@ -1,8 +1,9 @@
 package myproject.graduation.model;
 
-import lombok.*;
-import myproject.graduation.util.DateTimeUtil;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +26,6 @@ public class Voice extends BaseEntity {
 
     @Column(name = "date_time", nullable = false)
     @NotNull
-    @DateTimeFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
     private LocalDateTime dateTime;
 
     public Voice(Integer id, Integer userId, Integer restaurantId, LocalDateTime dateTime) {

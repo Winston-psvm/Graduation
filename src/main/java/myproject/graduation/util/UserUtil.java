@@ -1,4 +1,5 @@
 package myproject.graduation.util;
+
 import lombok.experimental.UtilityClass;
 import myproject.graduation.model.Role;
 import myproject.graduation.model.User;

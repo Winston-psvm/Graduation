@@ -1,4 +1,5 @@
 package myproject.graduation.to;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

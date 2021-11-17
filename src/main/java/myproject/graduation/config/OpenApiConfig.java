@@ -26,11 +26,11 @@ import org.springframework.context.annotation.Configuration;
         security = @SecurityRequirement(name = "basicAuth")
 )
 public class OpenApiConfig {
-        @Bean
-        public GroupedOpenApi api() {
-                return GroupedOpenApi.builder()
-                        .group("REST API")
-                        .pathsToMatch("/api/**")
-                        .build();
-        }
+    @Bean
+    public GroupedOpenApi api() {
+        return GroupedOpenApi.builder()
+                .group("REST API")
+                .pathsToMatch("/api/**")
+                .build();
+    }
 }

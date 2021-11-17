@@ -35,7 +35,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void register() throws Exception {
-        Restaurant restaurant = new Restaurant(null,"Keba", "Lithuan", "+3758825588", null);
+        Restaurant restaurant = new Restaurant(null, "Keba", "Lithuan", "+3758825588", null);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(restaurant)))
@@ -54,14 +54,14 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         Restaurant updateRest = new Restaurant(null, "newName", "javana", "+589556666", Collections.singletonList(admin));
-        perform(MockMvcRequestBuilders.put(REST_URL + "/" + RESTAURANT_ID ).contentType(MediaType.APPLICATION_JSON)
+        perform(MockMvcRequestBuilders.put(REST_URL + "/" + RESTAURANT_ID).contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updateRest)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
         updateRest.setId(1);
 
-        RESTAURANT_MATCHER.assertMatch(restaurantDAO.getById(RESTAURANT_ID),updateRest);
+        RESTAURANT_MATCHER.assertMatch(restaurantDAO.getById(RESTAURANT_ID), updateRest);
     }
 
     @Test
