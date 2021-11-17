@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class RestaurantTestController extends AbstractControllerTest {
+public class RestaurantControllerTest extends AbstractControllerTest {
     @Autowired
     private RestaurantDAO restaurantDAO;
 

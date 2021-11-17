@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class ProfileTestController extends AbstractControllerTest {
+class ProfileControllerTest extends AbstractControllerTest {
 
     @Autowired
     private UserDAO dao;

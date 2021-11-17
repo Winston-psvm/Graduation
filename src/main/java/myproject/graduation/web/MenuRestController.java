@@ -1,10 +1,14 @@
 package myproject.graduation.web;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.graduation.dao.MenuDao;
 import myproject.graduation.dao.RestaurantDAO;
 import myproject.graduation.model.Menu;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,8 @@ import static myproject.graduation.util.ValidationUtil.checkNew;
 @RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
+@CacheConfig(cacheNames = "menu")
+@Tag(name = "Menu Controller")
 public class MenuRestController extends WebValidation {
 
     static final String REST_URL = "/api/admin/restaurant/menu";
@@ -34,6 +40,7 @@ public class MenuRestController extends WebValidation {
 
     @Transactional
     @GetMapping
+    @Cacheable
     public List<Menu> getAllMenu(@AuthenticationPrincipal AuthUser authUser) {
         Integer restId = getRestId(authUser);
         checkAdmins(restId, authUser.getUser());
@@ -42,6 +49,7 @@ public class MenuRestController extends WebValidation {
 
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CacheEvict(allEntries = true)
     public ResponseEntity<Menu> createMenu(@RequestBody @Valid Menu menu, @AuthenticationPrincipal AuthUser authUser) {
         log.info("create {}", menu);
 
@@ -61,6 +69,7 @@ public class MenuRestController extends WebValidation {
     @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void update(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id, @RequestBody @Valid Menu updateMenu) {
         log.info("update menu {} with id ={}", updateMenu, id);
 
@@ -76,6 +85,7 @@ public class MenuRestController extends WebValidation {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void delete(@PathVariable int id, @AuthenticationPrincipal AuthUser authUser) {
         log.info("delete menu by id = {}", id);
         checkAdmins(getRestId(authUser), authUser.getUser());

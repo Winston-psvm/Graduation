@@ -1,5 +1,6 @@
 package myproject.graduation.web;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.graduation.dao.UserDAO;
@@ -29,6 +30,7 @@ import static myproject.graduation.util.ValidationUtil.checkNew;
 @RequestMapping(value = ProfileRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
+@Tag(name = "Profile Controller")
 public class ProfileRestController {
     static final String REST_URL = "/api/profile";
 

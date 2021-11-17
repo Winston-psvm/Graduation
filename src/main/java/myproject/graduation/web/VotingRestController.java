@@ -1,5 +1,6 @@
 package myproject.graduation.web;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.graduation.dao.MenuDao;
@@ -9,6 +10,8 @@ import myproject.graduation.error.IllegalRequestDataException;
 import myproject.graduation.model.Menu;
 import myproject.graduation.model.Restaurant;
 import myproject.graduation.model.Voice;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +27,8 @@ import java.util.Optional;
 @RequestMapping (value = VotingRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
+@CacheConfig(cacheNames = "restaurant")
+@Tag(name = "Voting Controller")
 public class VotingRestController {
     static final String REST_URL = "/api/voting";
 
@@ -32,6 +37,7 @@ public class VotingRestController {
     private final VoiceDAO voiceDAO;
 
     @GetMapping
+    @Cacheable
     public List<Restaurant> getAll() {
         return restaurantDAO.getAll();
     }

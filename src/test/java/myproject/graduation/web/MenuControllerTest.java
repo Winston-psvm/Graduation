@@ -19,7 +19,7 @@ import static myproject.graduation.web.TestData.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MenuTestController extends AbstractControllerTest{
+public class MenuControllerTest extends AbstractControllerTest{
     @Autowired
     private MenuDao menuDao;
 

@@ -1,5 +1,6 @@
 package myproject.graduation.web;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import myproject.graduation.dao.RestaurantDAO;
@@ -28,6 +29,7 @@ import static myproject.graduation.util.ValidationUtil.checkNew;
 @RequestMapping(value = RestaurantRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
+@Tag(name = "Restaurant Controller")
 public class RestaurantRestController extends WebValidation {
 
     static final String REST_URL = "/api/admin/restaurant";
