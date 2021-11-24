@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-//http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
+
 @Configuration
 @SecurityScheme(
         name = "basicAuth",
