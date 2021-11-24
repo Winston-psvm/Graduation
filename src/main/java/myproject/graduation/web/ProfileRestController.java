@@ -1,5 +1,9 @@
 package myproject.graduation.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +42,11 @@ public class ProfileRestController {
     private final VoiceDAO voiceDAO;
 
     @GetMapping
+    @Operation(summary = "Get authorized user",
+            responses = {
+                    @ApiResponse(description = "The user",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class)))})
     public User get(@AuthenticationPrincipal AuthUser authUser) {
         return authUser.getUser();
     }
@@ -45,6 +54,11 @@ public class ProfileRestController {
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "User registration",
+            responses = {
+                    @ApiResponse(description = "The user",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class)))})
     public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
         log.info("register {}", userTo);
 
@@ -62,6 +76,7 @@ public class ProfileRestController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete user")
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("delete {}", authUser );
         userDAO.delete(authUser.id());
@@ -70,6 +85,7 @@ public class ProfileRestController {
     @Transactional
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Update user")
     public void update(@RequestBody @Valid UserTo userTo, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update {}", authUser);
 
@@ -83,6 +99,7 @@ public class ProfileRestController {
     }
 
     @GetMapping("/votingHistory")
+    @Operation(summary = "Get all user voices")
     public List<Voice> getVotingHistory(@AuthenticationPrincipal AuthUser authUser) {
         log.info("get votes from {}", authUser );
         return voiceDAO.getAllUserVotes(authUser.id());

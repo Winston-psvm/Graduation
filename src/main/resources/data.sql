@@ -1,5 +1,5 @@
 INSERT INTO RESTAURANT (title, address, telephone )
-VALUES ('Kebab', 'Lithuania', '+375882558899');
+VALUES ('Shaurma', 'Nevsky prospect, Saint Petersburg, Russia', '+375882558899');
 
 INSERT INTO USERS (name, email, password, restaurant_id)
 VALUES ('Admin', 'admin@gmail.com', '{noop}admin', 1),
@@ -11,13 +11,13 @@ VALUES ('ADMIN', 1),
        ('USER', 2);
 
 INSERT INTO VOICE (user_id, restaurant_id, date_time)
-VALUES (2, 1, '2021-11-15 10:00'),
-       (2, 1, '2021-11-16 10:00'),
+VALUES (1, 1, now()),
+       (1, 1, '2021-11-16 10:00'),
        (2, 1, '2021-11-14 10:00');
 
 
 INSERT INTO MENU (date, restaurant_id)
-VALUES ('2021-11-16', 1),
+VALUES (now(), 1),
        ('2021-10-11', 1),
        ('2021-10-12', 1),
        ('2021-10-13', 1),

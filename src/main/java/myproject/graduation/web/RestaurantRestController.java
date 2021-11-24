@@ -1,5 +1,9 @@
 package myproject.graduation.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +42,11 @@ public class RestaurantRestController extends WebValidation {
 
     @Transactional
     @GetMapping
+    @Operation(summary = "Get the restaurant where the admin is listed",
+            responses = {
+                    @ApiResponse(description = "The restaurant",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Restaurant.class)))})
     public Restaurant get(@AuthenticationPrincipal AuthUser authUser) {
         Integer restId = getRestId(authUser);
         Optional<Restaurant> restaurant = Optional.ofNullable(restaurantDAO.getById(restId));
@@ -47,6 +56,11 @@ public class RestaurantRestController extends WebValidation {
 
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Restaurant registration",
+            responses = {
+                    @ApiResponse(description = "The restaurant",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Restaurant.class)))})
     public ResponseEntity<Restaurant> createRestaurantWithLocation(@RequestBody @Valid Restaurant restaurant, @AuthenticationPrincipal AuthUser authUser) {
         log.info("create {}", restaurant);
 
@@ -70,6 +84,7 @@ public class RestaurantRestController extends WebValidation {
     @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Update restaurant")
     public void update(@Valid @RequestBody Restaurant updateRest, @PathVariable int id, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update {} with id={}", updateRest, id);
 
@@ -88,6 +103,7 @@ public class RestaurantRestController extends WebValidation {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete restaurant")
     public void delete(@PathVariable int id, @AuthenticationPrincipal AuthUser authUser) {
         log.info("delete {}", id);
         checkAdmins(id, authUser.getUser());

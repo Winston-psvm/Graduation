@@ -1,5 +1,9 @@
 package myproject.graduation.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +42,21 @@ public class VotingRestController {
 
     @GetMapping
     @Cacheable
+    @Operation(summary = "Get all restaurants",
+            responses = {
+                    @ApiResponse(description = "The restaurant",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Restaurant.class)))})
     public List<Restaurant> getAll() {
         return restaurantDAO.getAll();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get current menu of the selected restaurant",
+            responses = {
+                    @ApiResponse(description = "The menu",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Menu.class)))})
     public Menu getMenu(@PathVariable int id) {
         Integer menuId = menuDao.getCurrentMenuId(id);
         Optional<Menu> menu = Optional.ofNullable(menuDao.getWithDishes(menuId));
@@ -52,6 +66,9 @@ public class VotingRestController {
 
     @Transactional
     @PostMapping("/{id}")
+    @Operation(summary = "Vote",
+            responses = {
+                    @ApiResponse(responseCode = "422", description = "Voting is over")})
     public void voting( @AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
         log.info("voting restaurant id {}", id);
 
@@ -65,6 +82,7 @@ public class VotingRestController {
     }
 
     @GetMapping("/vote")
+    @Operation(summary = "Get the current votes")
     public List<Voice> getCurrentVoices() {
         return voiceDAO.getCurrentVoices(LocalDate.now());
     }
