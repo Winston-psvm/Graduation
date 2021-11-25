@@ -95,8 +95,8 @@ public class ProfileRestController {
     @Operation(summary = "Update user", responses = {
             @ApiResponse(responseCode = "204", description = "No content",
                     content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\n \"name\": \"Alex\",\n" +
-                                    "  \"email\": \"alex@gmail.com\",\n" +
+                            examples = @ExampleObject(value = "{\n \"name\": \"Alexius\",\n" +
+                                    "  \"email\": \"alexius@gmail.com\",\n" +
                                     "  \"password\": \"password\"\n" +
                                     "}"),
                             schema = @Schema(implementation = UserTo.class))),

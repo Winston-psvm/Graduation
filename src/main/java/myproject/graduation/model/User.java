@@ -63,6 +63,7 @@ public class User extends BaseEntity implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     @JsonBackReference
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
 

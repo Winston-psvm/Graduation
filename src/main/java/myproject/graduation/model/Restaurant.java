@@ -35,7 +35,7 @@ public class Restaurant extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @JsonManagedReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private User admin;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")

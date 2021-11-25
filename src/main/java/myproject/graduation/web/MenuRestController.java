@@ -52,7 +52,6 @@ public class MenuRestController extends WebValidation {
                                     schema = @Schema(implementation = Menu.class)))})
     public List<Menu> getAllMenu(@AuthenticationPrincipal AuthUser authUser) {
         Integer restId = getRestId(authUser);
-        checkAdmins(restId, authUser.getUser());
         return menuDao.getAllMenuByRestId(restId);
     }
 
@@ -68,7 +67,6 @@ public class MenuRestController extends WebValidation {
         log.info("create {}", menu);
 
         Integer restId = getRestId(authUser);
-        checkAdmins(restId, authUser.getUser());
         checkNew(menu);
         Assert.notNull(menu, "Menu must be not null");
 
@@ -88,7 +86,6 @@ public class MenuRestController extends WebValidation {
     public void update(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id, @RequestBody @Valid Menu updateMenu) {
         log.info("update menu {} with id ={}", updateMenu, id);
 
-        checkAdmins(getRestId(authUser), authUser.getUser());
         assureIdConsistent(updateMenu, id);
         Assert.notNull(updateMenu, "Restaurant must be not null");
 
@@ -104,7 +101,6 @@ public class MenuRestController extends WebValidation {
     @Operation(summary = "Delete menu")
     public void delete(@PathVariable int id, @AuthenticationPrincipal AuthUser authUser) {
         log.info("delete menu by id = {}", id);
-        checkAdmins(getRestId(authUser), authUser.getUser());
         menuDao.delete(id);
     }
 }

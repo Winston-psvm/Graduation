@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static myproject.graduation.web.RestaurantRestController.REST_URL;
 import static myproject.graduation.web.TestData.*;
@@ -33,9 +32,9 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = ADMIN_MAIL)
+    @WithUserDetails(value = USER_MAIL)
     void register() throws Exception {
-        Restaurant restaurant = new Restaurant(null, "Keba", "Lithuan", "+3758825588");
+        Restaurant restaurant = new Restaurant(null, "Kebab", "Lithuania", "+3758825588");
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(restaurant)))
@@ -54,7 +53,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         Restaurant updateRest = new Restaurant(null, "newName", "javana", "+589556666");
-        perform(MockMvcRequestBuilders.put(REST_URL + "/" + RESTAURANT_ID).contentType(MediaType.APPLICATION_JSON)
+        perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updateRest)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
@@ -67,7 +66,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + "/" + RESTAURANT_ID))
+        perform(MockMvcRequestBuilders.delete(REST_URL))
                 .andExpect(status().isNoContent());
         RESTAURANT_MATCHER.assertMatch(restaurantDAO.getAll(), new ArrayList<>());
     }

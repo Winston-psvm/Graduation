@@ -7,8 +7,6 @@ import myproject.graduation.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import java.util.List;
-
 public class WebValidation {
 
     @Autowired
@@ -18,15 +16,8 @@ public class WebValidation {
         return userDAO.getRestId(authUser.id());
     }
 
-    public void checkAdmins(int restaurantID, User admin) {
-        List<User> admins = userDAO.getAllAdmins(restaurantID);
-
-        if (!admins.contains(admin)) throw new IllegalRequestDataException("You do not have access to this updateRest");
-
-    }
-
     public void checkUser(User user) {
-        if (!user.getRoles().contains(Role.ADMIN)) throw new IllegalRequestDataException("You must be admin.");
+        if (user.getRoles().contains(Role.ADMIN)) throw new IllegalRequestDataException("You are already a restaurant administrator");
     }
 
 }
