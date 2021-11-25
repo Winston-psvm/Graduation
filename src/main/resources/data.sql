@@ -7,7 +7,6 @@ VALUES ('Admin', 'admin@gmail.com', '{noop}admin', 1),
 
 INSERT INTO USER_ROLES (role, user_id)
 VALUES ('ADMIN', 1),
-       ('USER', 1),
        ('USER', 2);
 
 INSERT INTO VOICE (user_id, restaurant_id, date_time)

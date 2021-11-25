@@ -118,7 +118,7 @@ public class ProfileRestController {
     }
 
     @GetMapping("/votingHistory")
-    @Operation(summary = "Get all user voices")
+    @Operation(summary = "Get all user voices", description = "Admin cannot view his voting history")
     public List<Voice> getVotingHistory(@AuthenticationPrincipal AuthUser authUser) {
         log.info("get votes from {}", authUser );
         return voiceDAO.getAllUserVotes(authUser.id());

@@ -38,7 +38,6 @@ class ProfileControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-
     @Test
     void register() throws Exception {
         UserTo newTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
@@ -54,8 +53,6 @@ class ProfileControllerTest extends AbstractControllerTest {
         newUser.setId(newId);
         USER_MATCHER.assertMatch(created, newUser);
         USER_MATCHER.assertMatch(dao.getById(newId), newUser);
-
-
     }
 
     @Test
@@ -101,15 +98,4 @@ class ProfileControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnprocessableEntity());
 
     }
-
-//    @Test
-//    @WithUserDetails(value = USER_MAIL)
-//    void getVoicesHistory() throws Exception {
-//        perform(MockMvcRequestBuilders.get(REST_URL + "/votingHistory"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(VOICE_MATCHER.contentJson(voice));
-//    }
-
-
 }
