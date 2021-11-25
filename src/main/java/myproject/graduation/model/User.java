@@ -21,10 +21,16 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends NamedEntity implements Serializable {
+public class User extends BaseEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
+
+    @Column(name = "name", nullable = false)
+    @NotBlank
+    @NotEmpty(message = "Please provide your name")
+    @Size(min = 2, max = 100)
+    public String name;
 
     @Column(name = "email", nullable = false, unique = true)
     @Email(message = "Please provide a valid e-mail")
@@ -54,7 +60,7 @@ public class User extends NamedEntity implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     @JsonBackReference
     private Restaurant restaurant;
@@ -64,14 +70,13 @@ public class User extends NamedEntity implements Serializable {
         this(u.id, u.name, u.email, u.password, u.registered, u.roles);
     }
 
-
-
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
         this(id, name, email, password, new Date(), EnumSet.of(role, roles));
     }
 
     public User(Integer id, String name, String email, String password, Date registered, Collection<Role> roles) {
-        super(id, name);
+        super(id);
+        this.name = name;
         this.email = email;
         this.password = password;
         this.registered = registered;

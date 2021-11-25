@@ -42,11 +42,7 @@ public class RestaurantRestController extends WebValidation {
 
     @Transactional
     @GetMapping
-    @Operation(summary = "Get the restaurant where the admin is listed",
-            responses = {
-                    @ApiResponse(description = "The restaurant",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Restaurant.class)))})
+    @Operation(summary = "Get the restaurant where the admin is listed")
     public Restaurant get(@AuthenticationPrincipal AuthUser authUser) {
         Integer restId = getRestId(authUser);
         Optional<Restaurant> restaurant = Optional.ofNullable(restaurantDAO.getById(restId));
@@ -56,23 +52,13 @@ public class RestaurantRestController extends WebValidation {
 
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Restaurant registration",
-            responses = {
-                    @ApiResponse(description = "The restaurant",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Restaurant.class)))})
+    @Operation(summary = "Restaurant registration")
     public ResponseEntity<Restaurant> createRestaurantWithLocation(@RequestBody @Valid Restaurant restaurant, @AuthenticationPrincipal AuthUser authUser) {
         log.info("create {}", restaurant);
 
         checkUser(authUser.getUser());
         checkNew(restaurant);
         Assert.notNull(restaurant, "Restaurant must be not null");
-
-        Optional<List<User>> listAdmins = Optional.ofNullable(restaurant.getAdmins());
-        if (listAdmins.isPresent()) {
-            listAdmins.get().add(authUser.getUser());
-            restaurant.setAdmins(listAdmins.get());
-        } else restaurant.setAdmins(Collections.singletonList(authUser.getUser()));
 
         Restaurant created = restaurantDAO.save(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -96,7 +82,6 @@ public class RestaurantRestController extends WebValidation {
 
         oldRest.setAddress(updateRest.getAddress());
         oldRest.setTelephone(updateRest.getTelephone());
-        oldRest.setAdmins(updateRest.getAdmins());
 
         restaurantDAO.save(oldRest);
     }

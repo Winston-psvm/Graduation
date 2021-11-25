@@ -1,5 +1,5 @@
 INSERT INTO RESTAURANT (title, address, telephone )
-VALUES ('Shaurma', 'Nevsky prospect, Saint Petersburg, Russia', '+375882558899');
+VALUES ('Shaverma', 'Nevsky prospect, Saint Petersburg, Russia', '+375882558899');
 
 INSERT INTO USERS (name, email, password, restaurant_id)
 VALUES ('Admin', 'admin@gmail.com', '{noop}admin', 1),

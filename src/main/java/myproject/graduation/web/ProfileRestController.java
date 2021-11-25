@@ -2,6 +2,7 @@ package myproject.graduation.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,11 +56,17 @@ public class ProfileRestController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "User registration",
+            description = "This can only be done by an unregistered user.",
             responses = {
-                    @ApiResponse(description = "The user",
+                    @ApiResponse(responseCode = "201", description = "Created",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = User.class)))})
+                                    examples = @ExampleObject(value = "{\n \"name\": \"Alex\",\n" +
+                                    "  \"email\": \"alex@gmail.com\",\n" +
+                                    "  \"password\": \"password\"\n" +
+                                    "}"),
+                                    schema = @Schema(implementation = UserTo.class)))})
     public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
+
         log.info("register {}", userTo);
 
         checkNew(userTo);
@@ -76,7 +83,7 @@ public class ProfileRestController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete user")
+    @Operation(summary = "Delete user", responses = @ApiResponse(responseCode = "204", description = "No content"))
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("delete {}", authUser );
         userDAO.delete(authUser.id());
@@ -85,7 +92,15 @@ public class ProfileRestController {
     @Transactional
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Update user")
+    @Operation(summary = "Update user", responses = {
+            @ApiResponse(responseCode = "204", description = "No content",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = "{\n \"name\": \"Alex\",\n" +
+                                    "  \"email\": \"alex@gmail.com\",\n" +
+                                    "  \"password\": \"password\"\n" +
+                                    "}"),
+                            schema = @Schema(implementation = UserTo.class))),
+            @ApiResponse(responseCode = "422", description = "This email already exists")})
     public void update(@RequestBody @Valid UserTo userTo, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update {}", authUser);
 

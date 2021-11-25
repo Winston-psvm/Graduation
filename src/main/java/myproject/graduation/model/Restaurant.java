@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Restaurant extends BaseEntity {
-    @Column(name ="title", unique = true, nullable = false )
+    @Column(name = "title", unique = true, nullable = false)
     @NotBlank
     @NotEmpty(message = "Please provide title")
     @Size(min = 2, max = 100)
@@ -33,15 +33,15 @@ public class Restaurant extends BaseEntity {
     @Digits(fraction = 0, integer = 10)
     private String telephone;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<User> admins;
+    private User admin;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Menu> menus ;
+    private List<Menu> menus;
 
     public Restaurant(Integer id, String title, String address, String telephone) {
         super(id);
@@ -49,13 +49,4 @@ public class Restaurant extends BaseEntity {
         this.address = address;
         this.telephone = telephone;
     }
-
-    public Restaurant(Integer id, String title, String address, String telephone, List<User> admins) {
-        super(id);
-        this.title = title;
-        this.address = address;
-        this.telephone = telephone;
-        this.admins = admins;
-    }
-
 }
