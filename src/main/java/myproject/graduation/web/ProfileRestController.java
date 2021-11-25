@@ -60,10 +60,12 @@ public class ProfileRestController {
             responses = {
                     @ApiResponse(responseCode = "201", description = "Created",
                             content = @Content(mediaType = "application/json",
-                                    examples = @ExampleObject(value = "{\n \"name\": \"Alex\",\n" +
-                                    "  \"email\": \"alex@gmail.com\",\n" +
-                                    "  \"password\": \"password\"\n" +
-                                    "}"),
+                                    examples = @ExampleObject(value = """
+                                            {
+                                             "name": "Alex",
+                                              "email": "alex@gmail.com",
+                                              "password": "password"
+                                            }"""),
                                     schema = @Schema(implementation = UserTo.class)))})
     public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
 
@@ -95,10 +97,12 @@ public class ProfileRestController {
     @Operation(summary = "Update user", responses = {
             @ApiResponse(responseCode = "204", description = "No content",
                     content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\n \"name\": \"Alexius\",\n" +
-                                    "  \"email\": \"alexius@gmail.com\",\n" +
-                                    "  \"password\": \"password\"\n" +
-                                    "}"),
+                            examples = @ExampleObject(value = """
+                                    {
+                                     "name": "Alexius",
+                                      "email": "alexius@gmail.com",
+                                      "password": "password"
+                                    }"""),
                             schema = @Schema(implementation = UserTo.class))),
             @ApiResponse(responseCode = "422", description = "This email already exists")})
     public void update(@RequestBody @Valid UserTo userTo, @AuthenticationPrincipal AuthUser authUser) {

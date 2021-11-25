@@ -2,6 +2,7 @@ package myproject.graduation.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,10 +59,24 @@ public class MenuRestController extends WebValidation {
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(allEntries = true)
-    @Operation(summary = "Creating a new menu",
+    @Operation(summary = "Creating a new menu", description = "The menu is unique for one date",
             responses = {
-                    @ApiResponse(description = "The menu",
+                    @ApiResponse(responseCode = "201", description = "Created",
                             content = @Content(mediaType = "application/json",
+                                    examples = @ExampleObject(value = """
+                                            {
+                                              "date": "2021-11-26",
+                                              "dishes": [
+                                                {
+                                                  "title": "Shaverma wih shaurma",
+                                                  "price": 17.5
+                                                },
+                                                {
+                                                  "title": "Shaverma wih kebab",
+                                                  "price": 17.5
+                                                }
+                                              ]
+                                            }"""),
                                     schema = @Schema(implementation = Menu.class)))})
     public ResponseEntity<Menu> createMenu(@RequestBody @Valid Menu menu, @AuthenticationPrincipal AuthUser authUser) {
         log.info("create {}", menu);
@@ -78,28 +93,11 @@ public class MenuRestController extends WebValidation {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @Transactional
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(allEntries = true)
-    @Operation(summary = "Update menu")
-    public void update(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id, @RequestBody @Valid Menu updateMenu) {
-        log.info("update menu {} with id ={}", updateMenu, id);
-
-        assureIdConsistent(updateMenu, id);
-        Assert.notNull(updateMenu, "Restaurant must be not null");
-
-        Menu oldMenu = menuDao.get(id);
-        oldMenu.setDishes(updateMenu.getDishes());
-        oldMenu.setDate(updateMenu.getDate());
-        menuDao.save(oldMenu);
-    }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
     @Operation(summary = "Delete menu")
-    public void delete(@PathVariable int id, @AuthenticationPrincipal AuthUser authUser) {
+    public void delete(@PathVariable int id) {
         log.info("delete menu by id = {}", id);
         menuDao.delete(id);
     }

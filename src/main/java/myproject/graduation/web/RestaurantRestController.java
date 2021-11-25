@@ -14,7 +14,6 @@ import myproject.graduation.error.IllegalRequestDataException;
 import myproject.graduation.model.Restaurant;
 import myproject.graduation.model.Role;
 import myproject.graduation.model.User;
-import myproject.graduation.to.UserTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
-import java.util.Optional;
 
 import static myproject.graduation.util.ValidationUtil.assureIdConsistent;
 import static myproject.graduation.util.ValidationUtil.checkNew;
@@ -60,11 +58,12 @@ public class RestaurantRestController extends WebValidation {
     @Operation(summary = "Restaurant registration", description = "When creating a restaurant, the menu is not entered.",
             responses = { @ApiResponse(responseCode = "201", description = "Created",
                     content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\n" +
-                                    "  \"title\": \"Kebab\",\n" +
-                                    "  \"address\": \"Lithuania\",\n" +
-                                    "  \"telephone\": \"+3758825588\"\n" +
-                                    "}"),
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "title": "Kebab",
+                                      "address": "Lithuania",
+                                      "telephone": "+3758825588"
+                                    }"""),
                             schema = @Schema(implementation = Restaurant.class)))})
     public ResponseEntity<Restaurant> createWithLocation(@RequestBody @Valid Restaurant restaurant, @AuthenticationPrincipal AuthUser authUser) {
         log.info("create {}", restaurant);
@@ -92,11 +91,12 @@ public class RestaurantRestController extends WebValidation {
     @Operation(summary = "Update restaurant", responses = {
             @ApiResponse(responseCode = "204", description = "No content",
                     content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\n" +
-                                    "  \"title\": \"Kebabius\",\n" +
-                                    "  \"address\": \"Lithuania\",\n" +
-                                    "  \"telephone\": \"+3758825585\"\n" +
-                                    "}"),
+                            examples = @ExampleObject(value = """
+                                    {
+                                      "title": "Kebabius",
+                                      "address": "Lithuania",
+                                      "telephone": "+3758825585"
+                                    }"""),
                             schema = @Schema(implementation = Restaurant.class)))})
     public void update(@Valid @RequestBody Restaurant updateRest, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update {}", updateRest);

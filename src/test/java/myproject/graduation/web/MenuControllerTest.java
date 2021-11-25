@@ -40,20 +40,4 @@ public class MenuControllerTest extends AbstractControllerTest{
         MENU_MATCHER.assertMatch(created, menu);
         MENU_MATCHER.assertMatch(menuDao.get(newId), menu);
     }
-
-    @Test
-    @WithUserDetails(value = ADMIN_MAIL)
-    void update() throws Exception {
-        Menu updateMenu = new Menu(null, LocalDate.of(2021, 11, 10), List.of(new Dish(null, "Fish", 12.2), new Dish(null, "Cheese", 1.2)));
-        perform(MockMvcRequestBuilders.put(REST_URL + "/" + MENU_ID ).contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updateMenu)))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-
-        updateMenu.setId(1);
-
-        MENU_MATCHER.assertMatch(menuDao.getById(MENU_ID),updateMenu);
-    }
-
-
 }
