@@ -27,7 +27,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-import static myproject.graduation.util.ValidationUtil.assureIdConsistent;
 import static myproject.graduation.util.ValidationUtil.checkNew;
 
 @RestController
