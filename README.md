@@ -18,13 +18,12 @@ Voting service for deciding where to have lunch.
 
 - #### Manually
 
-    * [Download](https://github.com/Winston-psvm/Graduation/archive/refs/heads/master.zip) and unzip the project or make a [git clone](https://github.com/Winston-psvm/Graduation.git).
+    * [Download](https://github.com/Winston-psvm/Graduation/archive/refs/heads/master.zip) and unzip the project or [clone](https://github.com/Winston-psvm/Graduation.git).
     * Just run GraduationApplication.
     
 # How to use it?
 ![uml](uml.png)
 
-For ease of viewing, I suggest using [Swagger](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/).
+For the convenience of viewing I propose using [Swagger](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/).
 
-To view the Profile, Voting Controllers work, and create a restaurant in the Restaurant Controller, I suggest authorizing as a User (Username(user@yandex.ru), Password(password)), 
-in all other cases, the Admin profile (Username{admin@gmail.com), Password(admin)) will do.
+To view the Profile and Voting Controllers and to create a restaurant in the Restaurant Controller I propose authorizing as a User (Username (user@yandex.ru), Password (password)). In all other cases use the Admin profile (Username (admin@gmail.com), Password (admin)).  
