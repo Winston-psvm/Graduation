@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Voice extends BaseEntity {
+public class Vote extends BaseEntity {
 
     @Column(name = "user_id", nullable = false)
     private Integer userId;
@@ -28,7 +28,7 @@ public class Voice extends BaseEntity {
     @NotNull
     private LocalDateTime dateTime;
 
-    public Voice(Integer id, Integer userId, Integer restaurantId, LocalDateTime dateTime) {
+    public Vote(Integer id, Integer userId, Integer restaurantId, LocalDateTime dateTime) {
         super(id);
         this.userId = userId;
         this.restaurantId = restaurantId;

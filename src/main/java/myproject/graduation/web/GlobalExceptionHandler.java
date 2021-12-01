@@ -1,7 +1,7 @@
 package myproject.graduation.web;
 
 import lombok.AllArgsConstructor;
-import myproject.graduation.error.AppException;
+import myproject.graduation.exception.AppException;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

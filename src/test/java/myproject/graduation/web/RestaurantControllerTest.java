@@ -1,6 +1,6 @@
 package myproject.graduation.web;
 
-import myproject.graduation.dao.RestaurantDAO;
+import myproject.graduation.crud.CrudRestaurantRepository;
 import myproject.graduation.model.Restaurant;
 import myproject.graduation.util.JsonUtil;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class RestaurantControllerTest extends AbstractControllerTest {
     @Autowired
-    private RestaurantDAO restaurantDAO;
+    private CrudRestaurantRepository repository;
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
@@ -46,7 +46,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
         int newId = created.id();
         restaurant.setId(newId);
         RESTAURANT_MATCHER.assertMatch(created, restaurant);
-        RESTAURANT_MATCHER.assertMatch(restaurantDAO.getById(newId), restaurant);
+        RESTAURANT_MATCHER.assertMatch(repository.getById(newId), restaurant);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
 
         updateRest.setId(1);
 
-        RESTAURANT_MATCHER.assertMatch(restaurantDAO.getById(RESTAURANT_ID), updateRest);
+        RESTAURANT_MATCHER.assertMatch(repository.getById(RESTAURANT_ID), updateRest);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL))
                 .andExpect(status().isNoContent());
-        RESTAURANT_MATCHER.assertMatch(restaurantDAO.getAll(), new ArrayList<>());
+        RESTAURANT_MATCHER.assertMatch(repository.findAll(), new ArrayList<>());
     }
 
     @Test

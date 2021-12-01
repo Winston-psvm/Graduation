@@ -1,6 +1,6 @@
 package myproject.graduation.web;
 
-import myproject.graduation.dao.UserDAO;
+import myproject.graduation.crud.CrudUserRepository;
 import myproject.graduation.model.User;
 import myproject.graduation.to.UserTo;
 import myproject.graduation.util.JsonUtil;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ProfileControllerTest extends AbstractControllerTest {
 
     @Autowired
-    private UserDAO dao;
+    private CrudUserRepository repository;
 
     @Test
     @WithUserDetails(value = USER_MAIL)
@@ -52,7 +52,7 @@ class ProfileControllerTest extends AbstractControllerTest {
         int newId = created.id();
         newUser.setId(newId);
         USER_MATCHER.assertMatch(created, newUser);
-        USER_MATCHER.assertMatch(dao.getById(newId), newUser);
+        USER_MATCHER.assertMatch(repository.getById(newId), newUser);
     }
 
     @Test
@@ -64,7 +64,7 @@ class ProfileControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        USER_MATCHER.assertMatch(dao.getById(USER_ID), UserUtil.updateFromTo(new User(user), updatedTo));
+        USER_MATCHER.assertMatch(repository.getById(USER_ID), UserUtil.updateFromTo(new User(user), updatedTo));
     }
 
     @Test

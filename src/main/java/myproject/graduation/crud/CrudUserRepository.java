@@ -1,4 +1,4 @@
-package myproject.graduation.dao.crud;
+package myproject.graduation.crud;
 
 import myproject.graduation.model.User;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -13,9 +13,8 @@ public interface CrudUserRepository extends BaseRepository<User> {
 
     @EntityGraph(attributePaths = {"restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT u FROM User u WHERE u.id=?1")
-    User getWithRest(int id);
+    User getUserWithRestaurant(int id);
 
     Optional<User> getByEmail(String email);
 
-    List<User> getUserByRestaurantId(Integer id);
 }

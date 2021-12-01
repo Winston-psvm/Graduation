@@ -1,6 +1,6 @@
 package myproject.graduation.util;
 
-import myproject.graduation.error.IllegalRequestDataException;
+import myproject.graduation.exception.IllegalRequestDataException;
 
 public class ValidationUtil {
 

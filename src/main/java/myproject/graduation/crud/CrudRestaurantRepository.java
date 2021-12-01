@@ -1,4 +1,4 @@
-package myproject.graduation.dao.crud;
+package myproject.graduation.crud;
 
 import myproject.graduation.model.Restaurant;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,5 +9,7 @@ import java.util.List;
 public interface CrudRestaurantRepository extends BaseRepository<Restaurant> {
 
     List<Restaurant> findAll();
+
+    Restaurant findByAdmin_Id(Integer id);
 
 }

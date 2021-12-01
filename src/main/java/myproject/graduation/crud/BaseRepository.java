@@ -1,4 +1,4 @@
-package myproject.graduation.dao.crud;
+package myproject.graduation.crud;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

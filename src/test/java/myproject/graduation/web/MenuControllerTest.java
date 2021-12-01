@@ -1,6 +1,6 @@
 package myproject.graduation.web;
 
-import myproject.graduation.dao.MenuDao;
+import myproject.graduation.crud.CrudMenuRepository;
 import myproject.graduation.model.Dish;
 import myproject.graduation.model.Menu;
 import myproject.graduation.util.JsonUtil;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class MenuControllerTest extends AbstractControllerTest{
     @Autowired
-    private MenuDao menuDao;
+    private CrudMenuRepository repository;
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
@@ -38,6 +38,6 @@ public class MenuControllerTest extends AbstractControllerTest{
         int newId = created.id();
         menu.setId(newId);
         MENU_MATCHER.assertMatch(created, menu);
-        MENU_MATCHER.assertMatch(menuDao.get(newId), menu);
+        MENU_MATCHER.assertMatch(repository.getById(newId), menu);
     }
 }

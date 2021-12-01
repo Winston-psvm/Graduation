@@ -1,4 +1,4 @@
-package myproject.graduation.error;
+package myproject.graduation.exception;
 
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.HttpStatus;

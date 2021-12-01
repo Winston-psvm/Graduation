@@ -8,11 +8,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.graduation.dao.UserDAO;
-import myproject.graduation.dao.VoiceDAO;
-import myproject.graduation.error.IllegalRequestDataException;
+import myproject.graduation.crud.CrudUserRepository;
+import myproject.graduation.crud.CrudVoteRepository;
+import myproject.graduation.exception.IllegalRequestDataException;
 import myproject.graduation.model.User;
-import myproject.graduation.model.Voice;
+import myproject.graduation.model.Vote;
 import myproject.graduation.to.UserTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,8 +39,8 @@ import static myproject.graduation.util.ValidationUtil.checkNew;
 public class ProfileRestController {
     static final String REST_URL = "/api/profile";
 
-    private final UserDAO userDAO;
-    private final VoiceDAO voiceDAO;
+    private final CrudUserRepository userRepository;
+    private final CrudVoteRepository voteRepository;
 
     @GetMapping
     @Operation(summary = "Get authorized user",
@@ -73,22 +73,22 @@ public class ProfileRestController {
 
         checkNew(userTo);
 
-        if (userDAO.getByEmail(userTo.getEmail()).isPresent()) throw new IllegalRequestDataException("This email already exists");
+        if (userRepository.getByEmail(userTo.getEmail()).isPresent())
+            throw new IllegalRequestDataException("This email already exists");
 
-        User created = userDAO.save(prepareToSave(createNewFromTo(userTo)));
+        User created = userRepository.save(prepareToSave(createNewFromTo(userTo)));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL).build().toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete user", responses = @ApiResponse(responseCode = "204", description = "No content"))
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("delete {}", authUser );
-        userDAO.delete(authUser.id());
+        userRepository.delete(authUser.id());
     }
 
     @Transactional
@@ -110,18 +110,19 @@ public class ProfileRestController {
 
         assureIdConsistent(userTo, authUser.id());
         User user = authUser.getUser();
-        Optional<User> opt = userDAO.getByEmail(userTo.getEmail());
+        Optional<User> opt = userRepository.getByEmail(userTo.getEmail());
 
-        if (opt.isPresent() && !opt.get().id.equals(authUser.id()))  throw new IllegalRequestDataException("This email already exists");
-        else userDAO.save(prepareToSave(updateFromTo(user, userTo)));
+        if (opt.isPresent() && !opt.get().id.equals(authUser.id()))
+            throw new IllegalRequestDataException("This email already exists");
+
+        else userRepository.save(prepareToSave(updateFromTo(user, userTo)));
 
     }
 
     @GetMapping("/votingHistory")
     @Operation(summary = "Get all user voices", description = "Admin cannot view his voting history")
-    public List<Voice> getVotingHistory(@AuthenticationPrincipal AuthUser authUser) {
+    public List<Vote> getVotingHistory(@AuthenticationPrincipal AuthUser authUser) {
         log.info("get votes from {}", authUser );
-        return voiceDAO.getAllUserVotes(authUser.id());
+        return voteRepository.findAllByUserIdOrderByDateTimeDesc(authUser.id());
     }
-
 }

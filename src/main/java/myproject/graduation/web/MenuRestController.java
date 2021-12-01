@@ -8,8 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.graduation.dao.MenuDao;
-import myproject.graduation.dao.RestaurantDAO;
+import myproject.graduation.crud.CrudMenuRepository;
+import myproject.graduation.crud.CrudRestaurantRepository;
+import myproject.graduation.crud.CrudUserRepository;
+import myproject.graduation.exception.IllegalRequestDataException;
 import myproject.graduation.model.Menu;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import static myproject.graduation.util.ValidationUtil.checkNew;
 
@@ -34,26 +37,32 @@ import static myproject.graduation.util.ValidationUtil.checkNew;
 @Slf4j
 @AllArgsConstructor
 @CacheConfig(cacheNames = "menu")
-@Tag(name = "Menu Controller")
-public class MenuRestController extends WebValidation {
+@Tag(name = "Menu Controller", description = "The necessary role is admin.")
+public class MenuRestController{
 
     static final String REST_URL = "/api/admin/restaurant/menu";
 
-    private final RestaurantDAO restaurantDAO;
-    private final MenuDao menuDao;
+    private final CrudRestaurantRepository restaurantRepository;
+    private final CrudMenuRepository menuRepository;
+    private final CrudUserRepository userRepository;
 
     @Transactional
     @GetMapping
     @Cacheable
-    @Operation(summary = "Get all restaurant menus",
-            responses = {
-                    @ApiResponse(description = "The menu",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Menu.class)))})
+    @Operation(summary = "Get all restaurant menus")
     public List<Menu> getAllMenu(@AuthenticationPrincipal AuthUser authUser) {
-        Integer restId = getRestId(authUser);
-        return menuDao.getAllMenuByRestId(restId);
+        return menuRepository.getAllByRestaurantIdOrderByDateDesc(getRestaurantId(authUser));
     }
+
+    @Transactional
+    @GetMapping("/{id}")
+    @Operation(summary = "Get menu", description = "Example id = 1.")
+    public Menu getMenu(@AuthenticationPrincipal AuthUser authUser, @PathVariable Integer id){
+        Optional<Menu> menu = Optional.ofNullable(menuRepository.getWithDishes(id));
+        if (menu.isPresent() && menu.get().getRestaurant().id()==getRestaurantId(authUser)) return menu.get();
+        else throw new IllegalRequestDataException("You don't have such a menu.");
+    }
+
 
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -80,12 +89,11 @@ public class MenuRestController extends WebValidation {
     public ResponseEntity<Menu> createMenu(@RequestBody @Valid Menu menu, @AuthenticationPrincipal AuthUser authUser) {
         log.info("create {}", menu);
 
-        Integer restId = getRestId(authUser);
         checkNew(menu);
         Assert.notNull(menu, "Menu must be not null");
 
-        menu.setRestaurant(restaurantDAO.get(restId));
-        Menu created = menuDao.save(menu);
+        menu.setRestaurant(restaurantRepository.findByAdmin_Id(authUser.id()));
+        Menu created = menuRepository.save(menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -98,6 +106,10 @@ public class MenuRestController extends WebValidation {
     @Operation(summary = "Delete menu")
     public void delete(@PathVariable int id) {
         log.info("delete menu by id = {}", id);
-        menuDao.delete(id);
+        menuRepository.delete(id);
+    }
+
+    public Integer getRestaurantId(@AuthenticationPrincipal AuthUser authUser){
+        return userRepository.getUserWithRestaurant(authUser.id()).getRestaurant().id();
     }
 }

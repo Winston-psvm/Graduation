@@ -2,7 +2,7 @@ package myproject.graduation.config;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import myproject.graduation.dao.UserDAO;
+import myproject.graduation.crud.CrudUserRepository;
 import myproject.graduation.model.Role;
 import myproject.graduation.model.User;
 import myproject.graduation.web.AuthUser;
@@ -27,13 +27,13 @@ import java.util.Optional;
 @AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDAO dao;
+    private final CrudUserRepository userRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> {
             log.debug("Authenticating '{}'", email);
-            Optional<User> optionalUser = dao.getByEmail(email);
+            Optional<User> optionalUser = userRepository.getByEmail(email);
             return new AuthUser(optionalUser.orElseThrow(
                     () -> new UsernameNotFoundException("User '" + email + "' was not found")));
         };
