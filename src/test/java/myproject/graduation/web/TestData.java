@@ -6,8 +6,10 @@ import myproject.graduation.model.Role;
 import myproject.graduation.model.User;
 
 public class TestData {
-    public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "password");
-    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingEqualsComparator(Restaurant.class);
+    public static final MatcherFactory.Matcher<User> USER_MATCHER =
+            MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "password");
+    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER =
+            MatcherFactory.usingEqualsComparator(Restaurant.class);
     public static final MatcherFactory.Matcher<Menu> MENU_MATCHER = MatcherFactory.usingEqualsComparator(Menu.class);
 
     public static final int USER_ID = 2;

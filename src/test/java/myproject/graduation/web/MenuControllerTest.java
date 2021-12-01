@@ -26,7 +26,8 @@ public class MenuControllerTest extends AbstractControllerTest{
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void createMenu() throws Exception {
-        Menu menu = new Menu(null, LocalDate.of(2021, 11, 10), List.of(new Dish(null, "Fish", 12.2), new Dish(null, "Cheese", 1.2)));
+        Menu menu = new Menu(null, LocalDate.of(2021, 11, 10),
+                List.of(new Dish(null, "Fish", 12.2), new Dish(null, "Cheese", 1.2)));
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(menu)))

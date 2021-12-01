@@ -165,11 +165,11 @@ public class RestaurantRestController{
         restaurantRepository.delete(restId);
     }
 
-    public Integer getRestaurantId(@AuthenticationPrincipal AuthUser authUser){
+    private Integer getRestaurantId(@AuthenticationPrincipal AuthUser authUser){
         return userRepository.getUserWithRestaurant(authUser.id()).getRestaurant().id();
     }
 
-    public void checkUser(User user) {
+    private void checkUser(User user) {
         if (user.getRoles().contains(Role.ADMIN)) throw new IllegalRequestDataException("You are already a restaurant administrator");
     }
 }

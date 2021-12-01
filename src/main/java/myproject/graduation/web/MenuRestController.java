@@ -30,6 +30,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import static myproject.graduation.util.ValidationUtil.assureIdConsistent;
 import static myproject.graduation.util.ValidationUtil.checkNew;
 
 @RestController
@@ -58,9 +59,7 @@ public class MenuRestController{
     @GetMapping("/{id}")
     @Operation(summary = "Get menu", description = "Example id = 1.")
     public Menu getMenu(@AuthenticationPrincipal AuthUser authUser, @PathVariable Integer id){
-        Optional<Menu> menu = Optional.ofNullable(menuRepository.getWithDishes(id));
-        if (menu.isPresent() && menu.get().getRestaurant().id()==getRestaurantId(authUser)) return menu.get();
-        else throw new IllegalRequestDataException("You don't have such a menu.");
+        return checkMenu(authUser, id);
     }
 
 
@@ -100,6 +99,42 @@ public class MenuRestController{
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Transactional
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
+    @Operation(summary = "Update menu by id", description = "The menu is unique for one date.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "No content",
+                            content = @Content(mediaType = "application/json",
+                                    examples = @ExampleObject(value = """
+                                            {
+                                              "date": "2021-11-25",
+                                              "dishes": [
+                                                {
+                                                  "title": "Shaverma wih nuggets",
+                                                  "price": 17.5
+                                                },
+                                                {
+                                                  "title": "Shaverma wih french fries",
+                                                  "price": 17.5
+                                                }
+                                              ]
+                                            }"""),
+                                    schema = @Schema(implementation = Menu.class)))})
+    public void update(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id, @RequestBody @Valid Menu updateMenu) {
+        log.info("update menu {} with id ={}", updateMenu, id);
+
+        Menu oldMenu = checkMenu(authUser, id);
+        assureIdConsistent(updateMenu, id);
+        Assert.notNull(updateMenu, "Menu must be not null");
+
+        oldMenu.setDate(updateMenu.getDate());
+        oldMenu.setDishes(updateMenu.getDishes());
+
+        menuRepository.save(oldMenu);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
@@ -109,7 +144,13 @@ public class MenuRestController{
         menuRepository.delete(id);
     }
 
-    public Integer getRestaurantId(@AuthenticationPrincipal AuthUser authUser){
+    private Integer getRestaurantId(@AuthenticationPrincipal AuthUser authUser){
         return userRepository.getUserWithRestaurant(authUser.id()).getRestaurant().id();
+    }
+
+    private Menu checkMenu(@AuthenticationPrincipal AuthUser authUser, @PathVariable Integer id) {
+        Optional<Menu> menu = Optional.ofNullable(menuRepository.getWithDishes(id));
+        if (menu.isPresent() && menu.get().getRestaurant().id()==getRestaurantId(authUser)) return menu.get();
+        else throw new IllegalRequestDataException("You don't have such a menu.");
     }
 }

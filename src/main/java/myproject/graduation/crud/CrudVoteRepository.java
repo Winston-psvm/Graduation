@@ -9,10 +9,12 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface CrudVoteRepository extends BaseRepository<Vote> {
 
-    Vote findByUserIdAndDateTimeGreaterThanEqualAndDateTimeLessThanEqual(Integer userId, LocalDateTime start, LocalDateTime end );
+    Vote findByUserIdAndDateTimeGreaterThanEqualAndDateTimeLessThanEqual(Integer userId, LocalDateTime start,
+                                                                         LocalDateTime end );
 
     List<Vote> findAllByUserIdOrderByDateTimeDesc(Integer userId);
 
-    List<Vote> findAllByDateTimeGreaterThanEqualAndDateTimeLessThanEqualOrderByDateTimeDesc(LocalDateTime start, LocalDateTime end);
+    List<Vote> findAllByDateTimeGreaterThanEqualAndDateTimeLessThanEqualOrderByDateTimeDesc(LocalDateTime start,
+                                                                                            LocalDateTime end);
 
 }
