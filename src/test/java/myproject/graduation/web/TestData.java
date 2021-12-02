@@ -13,7 +13,6 @@ public class TestData {
     public static final MatcherFactory.Matcher<Menu> MENU_MATCHER = MatcherFactory.usingEqualsComparator(Menu.class);
 
     public static final int USER_ID = 2;
-    public static final int ADMIN_ID = 1;
     public static final int RESTAURANT_ID = 1;
     public static final String USER_MAIL = "user@yandex.ru";
     public static final String ADMIN_MAIL = "admin@gmail.com";

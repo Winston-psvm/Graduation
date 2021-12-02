@@ -53,22 +53,14 @@ public class RestaurantRestController{
 
     @GetMapping("/viewing")
     @Cacheable
-    @Operation(summary = "Get all restaurants",
-            responses = {
-                    @ApiResponse(description = "The restaurant",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Restaurant.class)))})
+    @Operation(summary = "Get all restaurants", description = "The necessary role is user.")
     public List<Restaurant> getAll() {
         return restaurantRepository.findAll();
     }
 
     @GetMapping("/viewing/{id}")
-    @Operation(summary = "Get current menu of the selected restaurant",
-            responses = {
-                    @ApiResponse(description = "The menu",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Menu.class)))})
-    public Menu getMenu(@PathVariable int id) {
+    @Operation(summary = "Get current menu of the selected restaurant", description = "The necessary role is user.")
+    public Menu getCurrentMenu(@PathVariable int id) {
         int menuId = menuRepository.getByDateAndRestaurantId(LocalDate.now(), id).id();
         Optional<Menu> menu = Optional.ofNullable(menuRepository.getWithDishes(menuId));
         if (menu.isPresent()) return menu.get();
@@ -77,13 +69,9 @@ public class RestaurantRestController{
 
     @Transactional
     @GetMapping
-    @Operation(summary = "Get the restaurant where the admin is listed")
+    @Operation(summary = "Get the restaurant where the admin is listed", description = "The necessary role is admin.")
     public Restaurant get(@AuthenticationPrincipal AuthUser authUser) {
-        try {
             return restaurantRepository.findByAdmin_Id(authUser.id());
-        } catch (NullPointerException e) {
-            throw new IllegalRequestDataException("You are not administrator");
-        }
     }
 
     @Transactional
@@ -103,7 +91,6 @@ public class RestaurantRestController{
                                                          @AuthenticationPrincipal AuthUser authUser) {
         log.info("create {}", restaurant);
 
-        checkUser(authUser.getUser());
         checkNew(restaurant);
         Assert.notNull(restaurant, "Restaurant must be not null");
 
@@ -123,7 +110,7 @@ public class RestaurantRestController{
     @Transactional
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Update restaurant", responses = {
+    @Operation(summary = "Update restaurant", description = "The necessary role is admin.",  responses = {
             @ApiResponse(responseCode = "204", description = "No content",
                     content = @Content(mediaType = "application/json",
                             examples = @ExampleObject(value = """
@@ -151,8 +138,7 @@ public class RestaurantRestController{
 
     @DeleteMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete restaurant",responses = {
-            @ApiResponse(responseCode = "204", description = "No content")})
+    @Operation(summary = "Delete restaurant", description = "The necessary role is admin.")
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("delete restaurant");
         Integer restId = getRestaurantId(authUser);
@@ -167,9 +153,5 @@ public class RestaurantRestController{
 
     private Integer getRestaurantId(@AuthenticationPrincipal AuthUser authUser){
         return userRepository.getUserWithRestaurant(authUser.id()).getRestaurant().id();
-    }
-
-    private void checkUser(User user) {
-        if (user.getRoles().contains(Role.ADMIN)) throw new IllegalRequestDataException("You are already a restaurant administrator");
     }
 }

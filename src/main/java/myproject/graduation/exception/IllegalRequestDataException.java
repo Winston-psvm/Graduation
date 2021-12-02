@@ -7,6 +7,6 @@ import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.M
 
 public class IllegalRequestDataException extends AppException {
     public IllegalRequestDataException(String msg) {
-        super(HttpStatus.UNPROCESSABLE_ENTITY, msg, ErrorAttributeOptions.of(MESSAGE));
+        super(HttpStatus.BAD_REQUEST, msg, ErrorAttributeOptions.of(MESSAGE));
     }
 }

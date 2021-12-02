@@ -49,8 +49,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
-                .antMatchers("/api/voting**").hasRole(Role.USER.name())
+                .antMatchers("/api/voting/**").hasRole(Role.USER.name())
                 .antMatchers("/api/profile/votingHistory").hasRole(Role.USER.name())
+                .antMatchers("/api/restaurant/viewing/**").hasRole(Role.USER.name())
+                .antMatchers(HttpMethod.POST, "/api/restaurant").hasRole(Role.USER.name())
+                .antMatchers("/api/restaurant/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/api/profile").anonymous()
                 .antMatchers("/api/**").authenticated()
                 .and().httpBasic()

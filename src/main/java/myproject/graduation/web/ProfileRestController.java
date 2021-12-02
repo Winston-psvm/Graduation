@@ -120,7 +120,7 @@ public class ProfileRestController {
     }
 
     @GetMapping("/votingHistory")
-    @Operation(summary = "Get all user voices", description = "Admin cannot view his voting history")
+    @Operation(summary = "Get all user voices", description = "The necessary role is user.")
     public List<Vote> getVotingHistory(@AuthenticationPrincipal AuthUser authUser) {
         log.info("get votes from {}", authUser );
         return voteRepository.findAllByUserIdOrderByDateTimeDesc(authUser.id());

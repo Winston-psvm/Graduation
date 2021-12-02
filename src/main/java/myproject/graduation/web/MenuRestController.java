@@ -50,14 +50,14 @@ public class MenuRestController{
     @Transactional
     @GetMapping
     @Cacheable
-    @Operation(summary = "Get all restaurant menus")
+    @Operation(summary = "Get all restaurants menus")
     public List<Menu> getAllMenu(@AuthenticationPrincipal AuthUser authUser) {
         return menuRepository.getAllByRestaurantIdOrderByDateDesc(getRestaurantId(authUser));
     }
 
     @Transactional
     @GetMapping("/{id}")
-    @Operation(summary = "Get menu", description = "Example id = 1.")
+    @Operation(summary = "Get menu")
     public Menu getMenu(@AuthenticationPrincipal AuthUser authUser, @PathVariable Integer id){
         return checkMenu(authUser, id);
     }
