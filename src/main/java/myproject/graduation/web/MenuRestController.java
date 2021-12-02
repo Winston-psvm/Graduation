@@ -50,7 +50,7 @@ public class MenuRestController{
     @Transactional
     @GetMapping
     @Cacheable
-    @Operation(summary = "Get all restaurants menus")
+    @Operation(summary = "Get all menu of the restaurants.")
     public List<Menu> getAllMenu(@AuthenticationPrincipal AuthUser authUser) {
         return menuRepository.getAllByRestaurantIdOrderByDateDesc(getRestaurantId(authUser));
     }
@@ -66,7 +66,7 @@ public class MenuRestController{
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(allEntries = true)
-    @Operation(summary = "Creating a new menu", description = "The menu is unique for one date",
+    @Operation(summary = "Creating a new menu", description = "The menu is unique for one day.",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Created",
                             content = @Content(mediaType = "application/json",
@@ -103,7 +103,7 @@ public class MenuRestController{
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
-    @Operation(summary = "Update menu by id", description = "The menu is unique for one date.",
+    @Operation(summary = "Update menu by id", description = "The menu is unique for one day.",
             responses = {
                     @ApiResponse(responseCode = "204", description = "No content",
                             content = @Content(mediaType = "application/json",

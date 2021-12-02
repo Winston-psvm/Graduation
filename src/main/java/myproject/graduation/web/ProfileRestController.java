@@ -74,7 +74,7 @@ public class ProfileRestController {
         checkNew(userTo);
 
         if (userRepository.getByEmail(userTo.getEmail()).isPresent())
-            throw new IllegalRequestDataException("This email already exists");
+            throw new IllegalRequestDataException("This email has already existed.");
 
         User created = userRepository.save(prepareToSave(createNewFromTo(userTo)));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -85,7 +85,7 @@ public class ProfileRestController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete user", responses = @ApiResponse(responseCode = "204", description = "No content"))
+    @Operation(summary = "Delete user")
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("delete {}", authUser );
         userRepository.delete(authUser.id());
@@ -103,8 +103,7 @@ public class ProfileRestController {
                                       "email": "alexius@gmail.com",
                                       "password": "password"
                                     }"""),
-                            schema = @Schema(implementation = UserTo.class))),
-            @ApiResponse(responseCode = "422", description = "This email already exists")})
+                            schema = @Schema(implementation = UserTo.class)))})
     public void update(@RequestBody @Valid UserTo userTo, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update {}", authUser);
 
@@ -113,7 +112,7 @@ public class ProfileRestController {
         Optional<User> opt = userRepository.getByEmail(userTo.getEmail());
 
         if (opt.isPresent() && !opt.get().id.equals(authUser.id()))
-            throw new IllegalRequestDataException("This email already exists");
+            throw new IllegalRequestDataException("This email has already existed.");
 
         else userRepository.save(prepareToSave(updateFromTo(user, userTo)));
 

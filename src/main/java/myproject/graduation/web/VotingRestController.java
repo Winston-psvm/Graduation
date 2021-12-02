@@ -32,9 +32,7 @@ public class VotingRestController {
 
     @Transactional
     @PostMapping("/{id}")
-    @Operation(summary = "Vote",
-            responses = {
-                    @ApiResponse(responseCode = "422", description = "Voting is over")})
+    @Operation(summary = "Vote")
     public void voting( @AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
         log.info("voting restaurant id {}", id);
 

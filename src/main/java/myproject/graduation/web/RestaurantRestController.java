@@ -59,17 +59,17 @@ public class RestaurantRestController{
     }
 
     @GetMapping("/viewing/{id}")
-    @Operation(summary = "Get current menu of the selected restaurant", description = "The necessary role is user.")
+    @Operation(summary = "Get current menu of the selected restaurant.", description = "The necessary role is user.")
     public Menu getCurrentMenu(@PathVariable int id) {
         int menuId = menuRepository.getByDateAndRestaurantId(LocalDate.now(), id).id();
         Optional<Menu> menu = Optional.ofNullable(menuRepository.getWithDishes(menuId));
         if (menu.isPresent()) return menu.get();
-        else throw new IllegalRequestDataException("The restaurant has no menu as of today");
+        else throw new IllegalRequestDataException("The restaurant has no menu for today.");
     }
 
     @Transactional
     @GetMapping
-    @Operation(summary = "Get the restaurant where the admin is listed", description = "The necessary role is admin.")
+    @Operation(summary = "Get the restaurant where the admin is listed.", description = "The necessary role is admin.")
     public Restaurant get(@AuthenticationPrincipal AuthUser authUser) {
             return restaurantRepository.findByAdmin_Id(authUser.id());
     }
@@ -77,7 +77,7 @@ public class RestaurantRestController{
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Restaurant registration",
-            description = "The necessary role is user. When creating a restaurant, the menu is not entered.",
+            description = "The necessary role is user. Do not specify in the menu when creating a restaurant.",
             responses = { @ApiResponse(responseCode = "201", description = "Created",
                     content = @Content(mediaType = "application/json",
                             examples = @ExampleObject(value = """

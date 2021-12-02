@@ -24,6 +24,6 @@ Voting service for deciding where to have lunch.
 # How to use it?
 ![uml](uml.png)
 
-For the convenience of viewing I propose using [Swagger](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/).
+For the convenience of viewing after run I propose using [Swagger](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/).
 
 To view the Profile and Voting Controllers and to create a restaurant in the Restaurant Controller I propose authorizing as a User (Username (user@yandex.ru), Password (password)). In all other cases use the Admin profile (Username (admin@gmail.com), Password (admin)).  
