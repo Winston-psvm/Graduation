@@ -30,7 +30,7 @@ public class User extends BaseEntity implements Serializable {
     @NotBlank
     @NotEmpty(message = "Please provide your name")
     @Size(min = 2, max = 100)
-    public String name;
+    private String name;
 
     @Column(name = "email", nullable = false, unique = true)
     @Email(message = "Please provide a valid e-mail")

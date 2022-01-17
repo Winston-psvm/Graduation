@@ -28,7 +28,7 @@ public class Menu extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE)
-    List<Dish> dishes;
+    private List<Dish> dishes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")

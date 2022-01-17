@@ -20,6 +20,9 @@ Voting service for deciding where to have lunch.
 
     * [Download](https://github.com/Winston-psvm/Graduation/archive/refs/heads/master.zip) and unzip the project or [clone](https://github.com/Winston-psvm/Graduation.git).
     * Just run GraduationApplication.
+  
+- #### via [Docker](https://www.docker.com)
+  * Run: <pre>docker run -p 8080:8080 winstonidsigi/winstonsigi:graduation</pre>
     
 # How to use it?
 ![uml](uml.png)
